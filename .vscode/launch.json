@@ -1,0 +1,1 @@
+{"version":"0.2.0","configurations":[{"name":"拡張機能を起動","type":"extensionHost","request":"launch","args":["--extensionDevelopmentPath=${workspaceFolder}","${workspaceFolder}/fixtures"],"outFiles":["${workspaceFolder}/dist/**/*.cjs"],"preLaunchTask":"npm: build"}]}

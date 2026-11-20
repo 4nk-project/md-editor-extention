@@ -1,0 +1,188 @@
+{
+  "name": "astro-markdown-visual-editor",
+  "displayName": "Astro Markdown Visual Editor",
+  "description": "Astroの記事用Markdownを、記事情報フォームとビジュアル画面で安全に編集します。",
+  "version": "0.1.0",
+  "publisher": "4nkproject",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "astro",
+    "markdown",
+    "visual editor",
+    "wysiwyg",
+    "frontmatter",
+    "blog"
+  ],
+  "main": "./dist/extension.cjs",
+  "activationEvents": [
+    "onCustomEditor:astroMarkdown.visualEditor"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "未信頼ワークスペースでは読み取り専用です。"
+    },
+    "virtualWorkspaces": false
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "astroMarkdown.openVisualEditor",
+        "title": "ブログ記事をビジュアル編集",
+        "enablement": "resourceExtname == .md"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "astroMarkdown.openVisualEditor",
+          "when": "resourceExtname == .md",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "astroMarkdown.openVisualEditor",
+          "when": "resourceExtname == .md"
+        }
+      ]
+    },
+    "customEditors": [
+      {
+        "viewType": "astroMarkdown.visualEditor",
+        "displayName": "ブログ記事をビジュアル編集",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          }
+        ],
+        "priority": "option"
+      }
+    ],
+    "configuration": {
+      "title": "Astro Markdown",
+      "properties": {
+        "astroMarkdown.imageDirectory": {
+          "type": "string",
+          "default": "assets/{name}",
+          "description": "記事のフォルダーを基準とする画像コピー先。{name}は記事の拡張子を除くファイル名。ワークスペース内に限ります。",
+          "scope": "resource"
+        },
+        "astroMarkdown.fields": {
+          "type": "array",
+          "description": "記事情報フォーム。キーはトップレベルのYAMLキーです。",
+          "default": [
+            {
+              "key": "title",
+              "label": "タイトル",
+              "type": "string"
+            },
+            {
+              "key": "description",
+              "label": "説明",
+              "type": "multiline"
+            },
+            {
+              "key": "pubDate",
+              "label": "公開日",
+              "type": "date"
+            },
+            {
+              "key": "tags",
+              "label": "タグ（1行に1件）",
+              "type": "stringArray"
+            },
+            {
+              "key": "heroImage",
+              "label": "アイキャッチ画像",
+              "type": "image"
+            },
+            {
+              "key": "draft",
+              "label": "下書き",
+              "type": "boolean"
+            }
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "label",
+              "type"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "multiline",
+                  "date",
+                  "stringArray",
+                  "boolean",
+                  "image"
+                ]
+              }
+            }
+          },
+          "scope": "resource"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "test:ui": "node scripts/test-ui.mjs",
+    "package": "vsce package --no-dependencies --allow-missing-repository --no-rewrite-relative-links",
+    "vscode:prepublish": "npm run build",
+    "test:vsix": "node scripts/test-ui.mjs --installed"
+  },
+  "dependencies": {
+    "markdown-it": "^15.0.3",
+    "prosemirror-commands": "^1.7.2",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-markdown": "^1.14.0",
+    "prosemirror-model": "^1.25.13",
+    "prosemirror-schema-list": "^1.6.1",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.43.0",
+    "remark-directive": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^26.6.6",
+    "@types/vscode": "1.96.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.1.1",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.65.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "katex": "^0.18.2",
+    "@vscode/vsce": {
+      "minimatch": "^11.0.1"
+    }
+  }
+}
