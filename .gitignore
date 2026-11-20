@@ -4,3 +4,4 @@ dist/
 .test-workspace/
 artifacts/
 .test-install/
+.DS_Store
